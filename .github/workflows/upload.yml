@@ -1,0 +1,23 @@
+name: Upload Keepalive File
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Runs every Sunday at 00:00 UTC
+
+  workflow_dispatch:  # Allows manual execution
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up rclone
+      run: |
+        mkdir -p ~/.config/rclone
+        echo "${{ secrets.RCLONE_CONFIG }}" > ~/.config/rclone/rclone.conf
+
+    - name: Create a keepalive file
+      run: echo "Keepalive" > keepalive.txt
+
+    - name: Upload file to Blomp
+      run: rclone copy keepalive.txt blomp:/KeepAliveFolder
