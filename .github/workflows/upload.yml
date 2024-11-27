@@ -1,4 +1,4 @@
-name: Upload Storage2024 to Blomp
+name: Upload Keepalive File
 
 on:
   schedule:
@@ -13,6 +13,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Install rclone
+      run: |
+        curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
+        unzip rclone-current-linux-amd64.zip
+        cd rclone-*-linux-amd64
+        sudo cp rclone /usr/bin/
+        rclone version
+
     - name: Set up rclone for Blomp
       run: |
         mkdir -p ~/.config/rclone
@@ -20,8 +28,7 @@ jobs:
         echo "${{ secrets.RCLONE_CONFIG_BLOMP_ENCRYPTED }}" >> ~/.config/rclone/rclone.conf
         echo "${{ secrets.RCLONE_CONFIG_BLOMP_CHUNKER }}" >> ~/.config/rclone/rclone.conf
 
-    - name: Upload Storage2024 to Blomp
+    - name: Upload keepalive file to Blomp
       run: |
-        mkdir -p Storage2024
-        echo "This is a test file for upload" > Storage2024/test.txt
-        rclone copy Storage2024 blomp:andidonbas@gmail.com/Storage2024/Storage2024 --progress --transfers 1 --modify-window=10s --log-level DEBUG
+        echo "Keepalive file" > keepalive.txt
+        rclone copy keepalive.txt blomp:/KeepAliveFolder --log-level DEBUG
