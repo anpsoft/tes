@@ -1,4 +1,4 @@
-name: Upload Keepalive File 
+name: Upload Keepalive File
 
 on:
   schedule:
@@ -41,7 +41,7 @@ jobs:
         echo "remote = blomp:andidonbas@gmail.com/Storage2024" >> ~/.config/rclone/rclone.conf
         echo "password = ${{ secrets.BLOMP_CRYPT_PASSWORD }}" >> ~/.config/rclone/rclone.conf
 
-  - name: Upload keepalive file to Blomp
-  run: |
-    echo "Keepalive file" > keepalive.txt
-    rclone copy keepalive.txt blomp:andidonbas@gmail.com/Storage2024 --log-level DEBUG
+    - name: Upload keepalive file to Blomp
+      run: |
+        echo "Keepalive file" > keepalive.txt
+        rclone copy keepalive.txt blomp:andidonbas@gmail.com/Storage2024 --log-level DEBUG
