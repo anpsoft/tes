@@ -24,9 +24,22 @@ jobs:
     - name: Set up rclone for Blomp
       run: |
         mkdir -p ~/.config/rclone
-        echo "${{ secrets.RCLONE_CONFIG_BLOMP }}" > ~/.config/rclone/rclone.conf
-        echo "${{ secrets.RCLONE_CONFIG_BLOMP_ENCRYPTED }}" >> ~/.config/rclone/rclone.conf
-        echo "${{ secrets.RCLONE_CONFIG_BLOMP_CHUNKER }}" >> ~/.config/rclone/rclone.conf
+        echo "[blomp]" > ~/.config/rclone/rclone.conf
+        echo "type = swift" >> ~/.config/rclone/rclone.conf
+        echo "user = ${{ secrets.BLOMP_USER }}" >> ~/.config/rclone/rclone.conf
+        echo "key = ${{ secrets.BLOMP_PASSWORD }}" >> ~/.config/rclone/rclone.conf
+        echo "auth = https://authenticate.ain.net" >> ~/.config/rclone/rclone.conf
+        echo "tenant = storage" >> ~/.config/rclone/rclone.conf
+        echo "auth_version = 2" >> ~/.config/rclone/rclone.conf
+        echo "endpoint_type = public" >> ~/.config/rclone/rclone.conf
+        echo "leave_parts_on_error = true" >> ~/.config/rclone/rclone.conf
+        echo "chunk_size = 1P" >> ~/.config/rclone/rclone.conf
+        echo "no_chunk = false" >> ~/.config/rclone/rclone.conf
+
+        echo "[blomp_encrypted]" >> ~/.config/rclone/rclone.conf
+        echo "type = crypt" >> ~/.config/rclone/rclone.conf
+        echo "remote = blomp:andidonbas@gmail.com" >> ~/.config/rclone/rclone.conf
+        echo "password = ${{ secrets.BLOMP_CRYPT_PASSWORD }}" >> ~/.config/rclone/rclone.conf
 
     - name: Upload keepalive file to Blomp
       run: |
