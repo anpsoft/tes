@@ -1,23 +1,27 @@
-name: Upload Keepalive File
+name: Upload Storage2024 to Blomp
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # Runs every Sunday at 00:00 UTC
-
-  workflow_dispatch:  # Allows manual execution
+    - cron: '0 0 * * 0'  # Every Sunday at midnight UTC
+  workflow_dispatch:
 
 jobs:
   upload:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up rclone
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up rclone for Blomp
       run: |
         mkdir -p ~/.config/rclone
-        echo "${{ secrets.RCLONE_CONFIG }}" > ~/.config/rclone/rclone.conf
+        echo "${{ secrets.RCLONE_CONFIG_BLOMP }}" > ~/.config/rclone/rclone.conf
+        echo "${{ secrets.RCLONE_CONFIG_BLOMP_ENCRYPTED }}" >> ~/.config/rclone/rclone.conf
+        echo "${{ secrets.RCLONE_CONFIG_BLOMP_CHUNKER }}" >> ~/.config/rclone/rclone.conf
 
-    - name: Create a keepalive file
-      run: echo "Keepalive" > keepalive.txt
-
-    - name: Upload file to Blomp
-      run: rclone copy keepalive.txt blomp:/KeepAliveFolder
+    - name: Upload Storage2024 to Blomp
+      run: |
+        mkdir -p Storage2024
+        echo "This is a test file for upload" > Storage2024/test.txt
+        rclone copy Storage2024 blomp:andidonbas@gmail.com/Storage2024/Storage2024 --progress --transfers 1 --modify-window=10s --log-level DEBUG
