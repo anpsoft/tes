@@ -41,7 +41,7 @@ jobs:
         echo "remote = blomp:andidonbas@gmail.com/Storage2024" >> ~/.config/rclone/rclone.conf
         echo "password = ${{ secrets.BLOMP_CRYPT_PASSWORD }}" >> ~/.config/rclone/rclone.conf
 
-    - name: Upload keepalive file to Blomp
-      run: |
-        echo "Keepalive file" > keepalive.txt
-        rclone copy keepalive.txt blomp:andidonbas@gmail.com/Storage2024 --log-level DEBUG -vv
+  - name: Upload keepalive file to Blomp
+  run: |
+    echo "Keepalive file" > keepalive.txt
+    rclone copy keepalive.txt blomp:andidonbas@gmail.com/Storage2024 --log-level DEBUG
