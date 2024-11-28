@@ -37,25 +37,24 @@ jobs:
         echo "no_chunk = false" >> ~/.config/rclone/rclone.conf
 
     - name: Create Keepalive file with timestamp
-      id: create_file  # Добавлен ID для доступа к переменной через steps
       run: |
         # Generate timestamp
         TIMESTAMP=$(date '+%Y-%m-%d')
         FILENAME="blomp_${TIMESTAMP}.txt"
         echo "Keepalive file for Blomp on ${TIMESTAMP}" > $FILENAME
         echo "Generated file: $FILENAME"
-        echo "::set-output name=filename::$FILENAME"  # Передача переменной на следующий шаг
+        # Save FILENAME to environment file
+        echo "FILENAME=$FILENAME" >> $GITHUB_ENV
 
     - name: Upload Keepalive file to Blomp
       run: |
-        # Используем переменную из предыдущего шага
-        FILENAME="${{ steps.create_file.outputs.filename }}"
-        echo "Uploading $FILENAME to blomp:/KeepAlive/"
-        rclone copy $FILENAME blomp:/KeepAlive/ --log-level DEBUG
-        echo "Uploaded $FILENAME to blomp:/KeepAlive/"
+        # Use the FILENAME from environment
+        echo "Uploading $FILENAME to blomp:/andidonbas@gmail.com/KeepAlive/"
+        rclone copy $FILENAME blomp:/andidonbas@gmail.com/KeepAlive/ --log-level DEBUG
+        echo "Uploaded $FILENAME to blomp:/andidonbas@gmail.com/KeepAlive/"
 
     - name: Verify Upload
       run: |
         # Verify that the file has been uploaded
-        echo "Listing files in blomp:/KeepAlive/"
-        rclone lsf blomp:/KeepAlive/ --log-level INFO
+        echo "Listing files in blomp:/andidonbas@gmail.com/KeepAlive/"
+        rclone lsf blomp:/andidonbas@gmail.com/KeepAlive/ --log-level INFO
